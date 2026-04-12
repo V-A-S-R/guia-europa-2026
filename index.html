@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Vinícius & Família — Europa 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F5F0E8;
+  --ink: #1A1612;
+  --gold: #B8974A;
+  --gold-light: #D4B87A;
+  --rust: #8B4A2E;
+  --sage: #5C7A6E;
+  --sky: #3D6B8C;
+  --warm-gray: #8A8178;
+  --card-bg: #FDFAF4;
+  --border: rgba(184,151,74,0.25);
+  --shadow: 0 2px 20px rgba(26,22,18,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* SPLASH SCREEN */
+#splash {
+  position: fixed; inset: 0; z-index: 1000;
+  background: var(--ink);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 24px;
+}
+#splash.hidden { display: none !important; }
+.splash-route {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; font-weight: 300; letter-spacing: 4px;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 28px;
+}
+.splash-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px; font-weight: 300; color: var(--cream);
+  text-align: center; line-height: 1.15; margin-bottom: 8px;
+}
+.splash-title em { font-style: italic; color: var(--gold-light); }
+.splash-sub {
+  font-size: 12px; color: var(--warm-gray); letter-spacing: 1px;
+  text-align: center; margin-bottom: 40px;
+}
+.splash-flags { display: flex; gap: 12px; margin-bottom: 48px; font-size: 28px; }
+.splash-divider {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  margin-bottom: 32px;
+}
+.splash-btn {
+  background: var(--gold); color: var(--ink);
+  border: none; padding: 14px 36px;
+  font-family: 'DM Sans', sans-serif; font-size: 12px;
+  font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; border-radius: 2px;
+}
+.splash-btn:active { transform: scale(0.97); }
+
+/* MAIN APP */
+#app { display: none; }
+#app.visible { display: block !important; }
+
+/* TOP BAR */
+.topbar {
+  background: var(--ink); color: var(--cream);
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+.topbar-left h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px; font-weight: 400; letter-spacing: 0.5px;
+}
+.topbar-left p { font-size: 10px; color: var(--warm-gray); letter-spacing: 1px; text-transform: uppercase; }
+.weather-widget {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(184,151,74,0.3);
+  border-radius: 6px; padding: 6px 10px;
+  text-align: right; cursor: pointer; min-width: 90px;
+}
+.weather-city { font-size: 9px; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
+.weather-temp { font-size: 18px; font-weight: 300; line-height: 1.2; }
+.weather-desc { font-size: 9px; color: var(--warm-gray); }
+
+/* NAV */
+.nav {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  display: flex; overflow-x: auto;
+  position: sticky; top: 61px; z-index: 99;
+  scrollbar-width: none;
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav-item {
+  flex: 0 0 auto; padding: 11px 14px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.5px;
+  color: var(--warm-gray); cursor: pointer; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s; text-transform: uppercase;
+}
+.nav-item.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* PANELS */
+.panel { display: none; padding: 14px 14px 80px; }
+.panel.active { display: block; }
+
+/* SECTION LABEL */
+.sec-label {
+  font-size: 10px; font-weight: 500; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--gold);
+  margin: 20px 0 10px; display: flex; align-items: center; gap: 8px;
+}
+.sec-label::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, var(--border), transparent);
+}
+
+/* DAY CARD */
+.day-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 10px; overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.day-header {
+  padding: 13px 14px;
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer; user-select: none;
+}
+.day-date {
+  background: var(--gold); color: var(--ink);
+  font-size: 10px; font-weight: 500; letter-spacing: 1px;
+  padding: 3px 8px; border-radius: 2px; white-space: nowrap;
+  text-transform: uppercase;
+}
+.day-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px; font-weight: 400; flex: 1; line-height: 1.3;
+}
+.day-flag { font-size: 16px; }
+.day-chevron { color: var(--warm-gray); font-size: 10px; transition: transform 0.25s; }
+.day-chevron.open { transform: rotate(180deg); }
+.day-body { display: none; border-top: 1px solid var(--border); }
+.day-body.open { display: block; }
+
+/* DESTINATION IMAGE */
+.dest-image {
+  width: 100%; height: 140px; object-fit: cover;
+  display: block;
+}
+.dest-image-placeholder {
+  width: 100%; height: 140px;
+  background: linear-gradient(135deg, #2C3E50, #3498DB);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+}
+
+/* TIMELINE ITEMS */
+.timeline { padding: 14px; }
+.tl-item { display: flex; gap: 10px; margin-bottom: 14px; }
+.tl-item:last-child { margin-bottom: 0; }
+.tl-left { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.tl-time {
+  font-size: 10px; font-weight: 500; color: var(--gold);
+  white-space: nowrap; min-width: 38px; text-align: center;
+  padding-top: 2px;
+}
+.tl-line { flex: 1; width: 1px; background: var(--border); margin-top: 4px; min-height: 16px; }
+.tl-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--gold); flex-shrink: 0; margin-top: 4px;
+}
+.tl-content { flex: 1; padding-bottom: 2px; }
+.tl-title { font-size: 13px; font-weight: 500; line-height: 1.4; }
+.tl-desc { font-size: 11px; color: var(--warm-gray); margin-top: 2px; line-height: 1.5; }
+.tl-alert {
+  background: rgba(184,151,74,0.1); border-left: 2px solid var(--gold);
+  border-radius: 0 4px 4px 0; padding: 6px 8px; margin-top: 6px;
+  font-size: 11px; color: var(--rust); line-height: 1.5;
+}
+.tl-tip {
+  background: rgba(61,107,140,0.08); border-left: 2px solid var(--sky);
+  border-radius: 0 4px 4px 0; padding: 6px 8px; margin-top: 6px;
+  font-size: 11px; color: var(--sky); line-height: 1.5;
+}
+
+/* MAPS BUTTON */
+.map-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--sage); color: white;
+  text-decoration: none; font-size: 10px; font-weight: 500;
+  padding: 5px 10px; border-radius: 3px; margin-top: 6px;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+
+/* DESTINATION CARDS */
+.dest-grid { display: grid; gap: 10px; }
+.dest-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden; box-shadow: var(--shadow);
+}
+.dest-card-img {
+  width: 100%; height: 120px; object-fit: cover;
+}
+.dest-card-img-placeholder {
+  width: 100%; height: 120px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; background: linear-gradient(135deg, #667eea, #764ba2);
+}
+.dest-card-body { padding: 12px; }
+.dest-card-body h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px; font-weight: 400; margin-bottom: 6px;
+}
+.dest-card-body p { font-size: 12px; color: var(--warm-gray); line-height: 1.6; }
+.dest-tag {
+  display: inline-block; font-size: 9px; font-weight: 500;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 2px; margin-right: 4px; margin-top: 6px;
+}
+.tag-gold { background: rgba(184,151,74,0.15); color: var(--gold); }
+.tag-sage { background: rgba(92,122,110,0.15); color: var(--sage); }
+.tag-sky { background: rgba(61,107,140,0.15); color: var(--sky); }
+
+/* RESTAURANT CARDS */
+.rest-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px; margin-bottom: 8px;
+  box-shadow: var(--shadow);
+}
+.rest-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.rest-name { font-size: 14px; font-weight: 500; }
+.rest-price { font-size: 11px; color: var(--sage); font-weight: 500; white-space: nowrap; }
+.rest-cuisine { font-size: 11px; color: var(--warm-gray); margin-bottom: 4px; }
+.rest-desc { font-size: 11px; color: var(--warm-gray); line-height: 1.5; }
+.rest-location { font-size: 10px; color: var(--gold); margin-top: 5px; }
+
+/* PHRASE CARDS */
+.phrase-section { margin-bottom: 20px; }
+.phrase-lang-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+}
+.phrase-lang-flag { font-size: 20px; }
+.phrase-lang-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 400;
+}
+.phrase-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 6px; overflow: hidden; margin-bottom: 6px;
+}
+.phrase-row {
+  display: flex; padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.phrase-row:last-child { border-bottom: none; }
+.phrase-pt { flex: 1; font-size: 12px; color: var(--warm-gray); }
+.phrase-local { flex: 1; font-size: 12px; font-weight: 500; color: var(--ink); }
+.phrase-phonetic { flex: 1; font-size: 11px; color: var(--gold); font-style: italic; }
+
+/* EMERGENCY CARDS */
+.emerg-card {
+  background: var(--card-bg); border: 1px solid rgba(139,74,46,0.3);
+  border-radius: 8px; padding: 12px; margin-bottom: 10px;
+  box-shadow: var(--shadow);
+}
+.emerg-country {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+}
+.emerg-flag { font-size: 20px; }
+.emerg-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px; font-weight: 400;
+}
+.emerg-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 12px; border-bottom: 1px solid var(--border); }
+.emerg-row:last-child { border-bottom: none; }
+.emerg-label { color: var(--warm-gray); }
+.emerg-value { font-weight: 500; color: var(--ink); }
+.emerg-value a { color: var(--rust); text-decoration: none; }
+
+/* TRANSPORT CARD */
+.transport-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden; margin-bottom: 10px;
+  box-shadow: var(--shadow);
+}
+.transport-header {
+  background: var(--ink); color: var(--cream);
+  padding: 10px 14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px; font-weight: 400;
+}
+.transport-body { padding: 12px; }
+.transport-option {
+  display: flex; gap: 10px; padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.transport-option:last-child { border-bottom: none; }
+.transport-icon { font-size: 18px; flex-shrink: 0; }
+.transport-info h4 { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+.transport-info p { font-size: 11px; color: var(--warm-gray); line-height: 1.5; }
+.transport-price {
+  font-size: 11px; font-weight: 500; color: var(--sage);
+  white-space: nowrap; margin-left: auto; padding-top: 2px;
+}
+
+/* PRACTICAL CARD */
+.practical-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px; margin-bottom: 10px;
+  box-shadow: var(--shadow);
+}
+.practical-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px; font-weight: 400; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.practical-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 12px; border-bottom: 1px solid var(--border); }
+.practical-row:last-child { border-bottom: none; }
+.practical-label { color: var(--warm-gray); }
+.practical-value { font-weight: 500; max-width: 60%; text-align: right; }
+
+/* TAXI CARD */
+.taxi-section { margin-bottom: 20px; }
+.taxi-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px; margin-bottom: 8px;
+  display: flex; gap: 10px; box-shadow: var(--shadow);
+}
+.taxi-icon { font-size: 22px; flex-shrink: 0; }
+.taxi-info h4 { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+.taxi-info p { font-size: 11px; color: var(--warm-gray); line-height: 1.5; }
+.taxi-badge {
+  display: inline-block; font-size: 9px; padding: 2px 6px;
+  border-radius: 2px; margin-top: 4px; font-weight: 500; letter-spacing: 0.5px;
+}
+.badge-recommended { background: rgba(92,122,110,0.15); color: var(--sage); }
+.badge-official { background: rgba(184,151,74,0.15); color: var(--gold); }
+
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--ink); border-top: 1px solid rgba(184,151,74,0.2);
+  display: flex; z-index: 100;
+}
+.bottom-nav-item {
+  flex: 1; padding: 8px 4px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  cursor: pointer; transition: all 0.2s;
+}
+.bottom-nav-item.active .bnav-icon { color: var(--gold); }
+.bottom-nav-item.active .bnav-label { color: var(--gold); }
+.bnav-icon { font-size: 18px; color: var(--warm-gray); }
+.bnav-label { font-size: 8px; color: var(--warm-gray); letter-spacing: 0.5px; text-transform: uppercase; }
+
+/* WEATHER BANNER */
+.weather-banner {
+  background: linear-gradient(135deg, var(--ink), #2C3E50);
+  border-radius: 8px; padding: 14px;
+  margin-bottom: 14px; color: white;
+  border: 1px solid rgba(184,151,74,0.3);
+}
+.wb-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.wb-city { font-size: 10px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+.wb-temp { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; line-height: 1; }
+.wb-desc { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+.wb-icon { font-size: 40px; }
+.wb-details { display: flex; gap: 14px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
+.wb-detail { font-size: 10px; color: rgba(255,255,255,0.5); }
+.wb-detail span { display: block; font-size: 13px; color: rgba(255,255,255,0.85); font-weight: 500; }
+.wb-selector { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.wb-btn {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7); font-size: 10px; padding: 4px 8px;
+  border-radius: 3px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+.wb-btn.active { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-route">Maringá → Europa → Maringá</div>
+  <div class="splash-flags">🇨🇭 🇮🇹 🇬🇷 🇹🇷 🇻🇦</div>
+  <div class="splash-title">Vinícius &amp;<br><em>Família</em></div>
+  <div class="splash-sub">20 de Maio — 3 de Junho · 2025</div>
+  <div class="splash-divider"></div>
+  <div style="font-size:11px;color:var(--warm-gray);text-align:center;margin-bottom:32px;line-height:1.8;">
+    Zurique · Civitavecchia · Mykonos<br>
+    Kusadasi · Marmaris · Nápoles · Roma · Vaticano
+  </div>
+  <button class="splash-btn" id="btn-entrar">▶ Abrir Guia</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>Europa 2025</h1>
+      <p>Vinícius · Família · 4 pessoas</p>
+    </div>
+    <div class="weather-widget" onclick="showPanel('clima'); setBottomNav(4)">
+      <div class="weather-city" id="tw-city">Roma</div>
+      <div class="weather-temp" id="tw-temp">...</div>
+      <div class="weather-desc" id="tw-desc">carregando</div>
+    </div>
+  </div>
+
+  <!-- TOP NAV -->
+  <div class="nav">
+    <div class="nav-item active" onclick="showPanel('roteiro'); setBottomNav(0); setTopNav(this)">Roteiro</div>
+    <div class="nav-item" onclick="showPanel('destinos'); setBottomNav(1); setTopNav(this)">Destinos</div>
+    <div class="nav-item" onclick="showPanel('restaurantes'); setBottomNav(2); setTopNav(this)">Restaurantes</div>
+    <div class="nav-item" onclick="showPanel('transporte'); setBottomNav(3); setTopNav(this)">Transporte</div>
+    <div class="nav-item" onclick="showPanel('clima'); setBottomNav(4); setTopNav(this)">Clima</div>
+    <div class="nav-item" onclick="showPanel('frases'); setBottomNav(5); setTopNav(this)">Frases</div>
+    <div class="nav-item" onclick="showPanel('emergencia'); setBottomNav(6); setTopNav(this)">SOS</div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- PANEL: ROTEIRO -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="panel active" id="panel-roteiro">
+
+    <div class="sec-label">Dias 0–1 · Viagem</div>
+
+    <!-- Dia 0 -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">19/05 · Ter</div>
+        <div class="day-title">Saída de Maringá 🇧🇷</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Manhã</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🚗 Saída de Maringá-PR</div>
+              <div class="tl-desc">Viagem de carro até Guarulhos-SP (casa dos pais). ~6h de viagem pela BR-376.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Tarde</div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏠 Chegada em Guarulhos</div>
+              <div class="tl-desc">Descanso na casa da família. Confirmar documentos, passaportes e reservas.</div>
+              <div class="tl-tip">💡 Dica: Deixar as malas já organizadas esta noite. Embarque amanhã às 18h25.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dia 1 -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">20/05 · Qua</div>
+        <div class="day-title">Embarque GRU 🇧🇷✈️</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">15h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏁 Chegar no aeroporto GRU</div>
+              <div class="tl-desc">Recomendado chegar 3h antes para voo internacional. Terminal 3 (Swiss).</div>
+              <div class="tl-alert">⚠️ Documentos: passaportes + seguro viagem + reservas impressas.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">18h25</div></div>
+            <div class="tl-content">
+              <div class="tl-title">✈️ DECOLAGEM — LX93 Swiss</div>
+              <div class="tl-desc">GRU → ZRH | Swiss Airlines | ~12h de voo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label">Dia 2 · Zurique & Roma</div>
+
+    <!-- Dia 2 -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">21/05 · Qui</div>
+        <div class="day-title">Zurique → Roma 🇨🇭🇮🇹</div>
+        <div class="day-flag">✈️</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" class="dest-image" alt="Zurique" onerror="this.style.display='none'">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">10h40</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🛬 Chegada em Zurique (ZRH)</div>
+              <div class="tl-desc">Conexão de ~7h. Ótima oportunidade para explorar a cidade.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">11h00</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🧳 Guardar malas — Locker no Aeroporto</div>
+              <div class="tl-desc">Gepäckaufbewahrung no próprio aeroporto (piso térreo perto do trilho). Aceitam cartão Wise/Bradesco. ~10–15 CHF/mala.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">11h20</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🚆 Trem Aeroporto → Centro</div>
+              <div class="tl-desc">Linha S-Bahn direto ao Zürich HB (Estação Central). ~10 min, ~4 CHF por pessoa.</div>
+              <a href="https://www.google.com/maps/dir/Zurich+Airport/Zürich+HB" target="_blank" class="map-btn">📍 Ver rota no Maps</a>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">12h–15h</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏞️ Lago de Zurique</div>
+              <div class="tl-desc">A 15 min a pé da estação central. Passeio pelo Bürkliplatz e orla do lago. Vista dos Alpes em dias claros.</div>
+              <a href="https://www.google.com/maps/place/Lake+Zurich" target="_blank" class="map-btn">📍 Lago de Zurique</a>
+              <div class="tl-tip">🍽️ Almoço barato: Supermer. Coop ou Migros perto da estação — self-service por 12–15 CHF. Ou Niederdorfstrasse para opções variadas.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">15h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🔄 Retorno ao aeroporto</div>
+              <div class="tl-desc">Voltar às malas e seguir para o gate. Lembrar: segurança ZRH pode ser rápida mas aeroporto é grande.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">17h50</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">✈️ DECOLAGEM — LX1732 Swiss</div>
+              <div class="tl-desc">ZRH → FCO (Roma Fiumicino) | ~2h voo</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">19h25</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🛬 Chegada Roma — Fiumicino (FCO)</div>
+              <div class="tl-desc">Transfer contratado: Fiumicino → Civitavecchia. ~1h15min de carro.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">21h30</div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏨 Hotel 7 Bell's House — Civitavecchia</div>
+              <div class="tl-desc">Check-in e descanso. Embarque no cruzeiro amanhã cedo.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label">Dias 3–10 · Cruzeiro MSC Divina</div>
+
+    <!-- Dia 3 - Embarque -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">22/05 · Sex</div>
+        <div class="day-title">Embarque MSC Divina 🚢</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Manhã</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏨 Check-out Hotel 7 Bell's House</div>
+              <div class="tl-desc">Café da manhã no hotel. Organizar bagagens para despachar no cruzeiro.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Tarde</div></div>
+            <div class="tl-content">
+              <div class="tl-title">⚓ Porto de Civitavecchia — Embarque</div>
+              <div class="tl-desc">Check-in MSC Divina. Explorar o navio, localizar cabine, confirmar passeios contratados.</div>
+              <a href="https://www.google.com/maps/place/Porto+di+Civitavecchia" target="_blank" class="map-btn">📍 Porto de Civitavecchia</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dia 4 - Navegação -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">23/05 · Sáb</div>
+        <div class="day-title">🌊 Dia de Navegação</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Dia todo</div></div>
+            <div class="tl-content">
+              <div class="tl-title">🚢 No mar — relaxar a bordo</div>
+              <div class="tl-desc">Aproveitar piscinas, restaurantes e entretenimento do MSC Divina. Amanhã: Mykonos!</div>
+              <div class="tl-tip">💡 Confirmar horários de atracação de Mykonos com a recepção do navio.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dia 5 - Mykonos -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">24/05 · Dom</div>
+        <div class="day-title">Mykonos 🇬🇷</div>
+        <div class="day-flag">🏝️</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&q=80" class="dest-image" alt="Mykonos" onerror="this.style.display='none'">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">TBC</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">⚓ Atracação em Mykonos</div>
+              <div class="tl-desc">Horário a confirmar com a MSC. Tender boat ou atracação direta.</div>
+              <div class="tl-alert">⏰ Confirmar horário de retorno ao navio com a equipe MSC.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Manhã</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏘️ Little Venice</div>
+              <div class="tl-desc">Casas coloridas debruçadas sobre o mar. Umas das mais fotogênicas da Grécia.</div>
+              <a href="https://www.google.com/maps/place/Little+Venice+Mykonos" target="_blank" class="map-btn">📍 Little Venice</a>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Manhã</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">⚙️ Moinhos de Vento (Kato Mili)</div>
+              <div class="tl-desc">Os famosos moinhos brancos com vista para o mar. Símbolo de Mykonos.</div>
+              <a href="https://www.google.com/maps/place/Mykonos+Windmills" target="_blank" class="map-btn">📍 Moinhos de Vento</a>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Tarde</div></div>
+            <div class="tl-content">
+              <div class="tl-title">🛍️ Mykonos Town (Chora)</div>
+              <div class="tl-desc">Ruelas brancas e azuis, lojas, igrejas. Explorar livremente — impossível se perder (e tudo bem se perder!).</div>
+              <a href="https://www.google.com/maps/place/Mykonos+Town" target="_blank" class="map-btn">📍 Mykonos Town</a>
+              <div class="tl-tip">💡 Moeda: Euro (€). Cartão aceito na maioria dos lugares.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dia 6 - Kusadasi -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">25/05 · Seg</div>
+        <div class="day-title">Kusadasi / Éfeso 🇹🇷</div>
+        <div class="day-flag">🏛️</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <img src="https://images.unsplash.com/photo-1545156521-1db7aa3c5dab?w=600&q=80" class="dest-image" alt="Efeso" onerror="this.style.display='none'">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">TBC</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">⚓ Atracação em Kusadasi</div>
+              <div class="tl-desc">Passeio contratado via MSC. Seguir instruções da equipe de excursões do navio.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Manhã</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏛️ Ruínas de Éfeso</div>
+              <div class="tl-desc">Uma das cidades romanas mais bem preservadas do mundo. Biblioteca de Celso, Teatro, Via Curetes. Incluso no passeio MSC.</div>
+              <a href="https://www.google.com/maps/place/Ephesus" target="_blank" class="map-btn">📍 Ruínas de Éfeso</a>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Tarde</div></div>
+            <div class="tl-content">
+              <div class="tl-title">⛪ Casa de Maria (Meryemana)</div>
+              <div class="tl-desc">Local sagrado onde acredita-se que a Virgem Maria passou seus últimos anos. Incluso no passeio MSC.</div>
+              <a href="https://www.google.com/maps/place/House+of+the+Virgin+Mary" target="_blank" class="map-btn">📍 Casa de Maria</a>
+              <div class="tl-tip">💡 Moeda: Lira Turca (₺). Mas Euro e dólar são aceitos em muitos lugares de turismo.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dia 7 - Marmaris -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">26/05 · Ter</div>
+        <div class="day-title">Marmaris 🇹🇷</div>
+        <div class="day-flag">⛵</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <img src="https://images.unsplash.com/photo-1589903308904-1010c2294adc?w=600&q=80" class="dest-image" alt="Marmaris" onerror="this.style.display='none'">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">TBC</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">⚓ Atracação em Marmaris</div>
+              <div class="tl-desc">Exploração livre. Sem passeio contratado — aproveitar a cidade no próprio ritmo.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Manhã</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏰 Castelo de Marmaris</div>
+              <div class="tl-desc">Vista panorâmica da cidade e baía. Entrada barata, ótimas fotos.</div>
+              <a href="https://www.google.com/maps/place/Marmaris+Castle" target="_blank" class="map-btn">📍 Castelo de Marmaris</a>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Tarde</div></div>
+            <div class="tl-content">
+              <div class="tl-title">🛍️ Bazar e orla de Marmaris</div>
+              <div class="tl-desc">Mercado local cheio de temperos, tapetes e lembranças. Regateio é bem-vindo e esperado!</div>
+              <a href="https://www.google.com/maps/place/Marmaris+Bazaar" target="_blank" class="map-btn">📍 Bazar de Marmaris</a>
+              <div class="tl-tip">💡 Negociar preços é costume local. Peça 40–50% de desconto como ponto de partida.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dia 8 - Navegação -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">27/05 · Qua</div>
+        <div class="day-title">🌊 Dia de Navegação</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Dia todo</div></div>
+            <div class="tl-content">
+              <div class="tl-title">🚢 No mar — rumo a Nápoles</div>
+              <div class="tl-desc">Dia de descanso a bordo. Amanhã: Pompeia!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dia 9 - Nápoles -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">28/05 · Qui</div>
+        <div class="day-title">Nápoles / Pompeia 🇮🇹</div>
+        <div class="day-flag">🌋</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <img src="https://images.unsplash.com/photo-1611601322175-ef8ec8c0e56b?w=600&q=80" class="dest-image" alt="Pompeia" onerror="this.style.display='none'">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">TBC</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">⚓ Atracação em Nápoles</div>
+              <div class="tl-desc">Passeio contratado via MSC: Pompeia + tour pela cidade.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Manhã</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🌋 Ruínas de Pompeia</div>
+              <div class="tl-desc">Cidade soterrada pelo Vesúvio em 79 d.C. Uma das mais importantes arqueológicas do mundo. Incluso no tour MSC.</div>
+              <a href="https://www.google.com/maps/place/Pompeii" target="_blank" class="map-btn">📍 Pompeia</a>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">Tarde</div></div>
+            <div class="tl-content">
+              <div class="tl-title">🍕 Tour por Nápoles</div>
+              <div class="tl-desc">A terra da pizza! Se sobrar tempo, a pizza napolitana original no Spaccanapoli é obrigação.</div>
+              <a href="https://www.google.com/maps/place/Spaccanapoli,+Naples" target="_blank" class="map-btn">📍 Spaccanapoli</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dia 10 - Desembarque + Roma -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">29/05 · Sex</div>
+        <div class="day-title">Desembarque + Roma 🇮🇹</div>
+        <div class="day-flag">🛍️</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">09h–10h</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">⚓ Desembarque em Civitavecchia</div>
+              <div class="tl-desc">Retirar bagagens e seguir para Roma.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">10h–11h</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🚆 Trem Civitavecchia → Roma Termini</div>
+              <div class="tl-desc">Linha FL5 direto para Roma Termini. ~1h15min. ~€7 por pessoa. Trens frequentes. Comprar no guichê ou app Trenitalia.</div>
+              <div class="tl-tip">💡 Do Termini até Via Principe Amedeo 132: 5 min a pé!</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">12h00</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏠 Check-in Airbnb</div>
+              <div class="tl-desc">Via Principe Amedeo, 132 — Roma. Deixar as malas e almoçar.</div>
+              <a href="https://www.google.com/maps/place/Via+Principe+Amedeo,+132,+Rome" target="_blank" class="map-btn">📍 Airbnb no Maps</a>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">14h00</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">⛪ Basílica Santa Maria Maggiore</div>
+              <div class="tl-desc">Uma das 4 basílicas papais de Roma. A poucos minutos do Airbnb a pé. Mosaicos paleocristãos extraordinários.</div>
+              <a href="https://www.google.com/maps/place/Basilica+di+Santa+Maria+Maggiore" target="_blank" class="map-btn">📍 Santa Maria Maggiore</a>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">15h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">⛪ Igreja Sant'Ignazio di Loyola</div>
+              <div class="tl-desc">Teto pintado em trompe l'oeil — ilusão ótica barroca espetacular. Entrada gratuita.</div>
+              <a href="https://www.google.com/maps/place/Church+of+Sant%27Ignazio+di+Loyola+in+Campo+Marzio" target="_blank" class="map-btn">📍 Sant'Ignazio</a>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">17h00</div></div>
+            <div class="tl-content">
+              <div class="tl-title">🛍️ Campo de' Fiori</div>
+              <div class="tl-desc">Praça histórica e vibrante. Lojas ao redor, pôr do sol bonito. Ótima para passeio e compras locais.</div>
+              <a href="https://www.google.com/maps/place/Campo+de'+Fiori" target="_blank" class="map-btn">📍 Campo de' Fiori</a>
+              <div class="tl-tip">💡 Se quiser jantar na região, o Rione XIII (Trastevere) é a 10 min de caminhada daqui.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label">Dia 11 · Roma Histórica</div>
+
+    <!-- Dia 11 - Coliseu + Centro -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">30/05 · Sáb</div>
+        <div class="day-title">Coliseu, Pantheon & Trevi 🏛️</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600&q=80" class="dest-image" alt="Coliseu Roma" onerror="this.style.display='none'">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">07h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">☕ Café da manhã — Airbnb ou Bar local</div>
+              <div class="tl-desc">Cappuccino + cornetto na padaria do bairro. Não pagar assento — beber no balcão é muito mais barato.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">08h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏟️ Coliseu + Fórum Romano + Palatino</div>
+              <div class="tl-desc">Tour guiado já contratado. Imensidade histórica — os 3 juntos exigem pelo menos 3–4h. Usar tênis confortável.</div>
+              <a href="https://www.google.com/maps/place/Colosseum" target="_blank" class="map-btn">📍 Coliseu</a>
+              <a href="https://www.google.com/maps/place/Roman+Forum" target="_blank" class="map-btn">📍 Fórum Romano</a>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">13h00</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🍝 Almoço — região do Coliseu</div>
+              <div class="tl-desc">Evitar os restaurantes imediatos ao Coliseu (caros e mediocres). Caminhar 5–10 min em direção ao Celio para opções melhores.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">14h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🕍 Pantheon</div>
+              <div class="tl-desc">Templo romano de 125 d.C. com cúpula perfeita. Incrível engenharia antiga. Entrada €5.</div>
+              <a href="https://www.google.com/maps/place/Pantheon+Rome" target="_blank" class="map-btn">📍 Pantheon</a>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">16h00</div></div>
+            <div class="tl-content">
+              <div class="tl-title">⛲ Fontana di Trevi</div>
+              <div class="tl-desc">A mais famosa fonte do mundo. Jogar a moeda com a mão direita e desejar voltar. Lotada — ir cedo ou tarde para menos gente.</div>
+              <a href="https://www.google.com/maps/place/Trevi+Fountain" target="_blank" class="map-btn">📍 Fontana di Trevi</a>
+              <div class="tl-tip">💡 Depois da Trevi, a 5 min a pé está a Piazza di Spagna (Escadaria Espanhola) — vale passar!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label">Dia 12 · Vaticano</div>
+
+    <!-- Dia 12 - Vaticano -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">31/05 · Dom</div>
+        <div class="day-title">Vaticano + Papa Leão XIV 🇻🇦</div>
+        <div class="day-flag">✝️</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <img src="https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=600&q=80" class="dest-image" alt="Vaticano" onerror="this.style.display='none'">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">06h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🌅 Sair cedo para o Vaticano</div>
+              <div class="tl-desc">É o último domingo de maio → entrada GRATUITA nos Museus! Mas as filas são imensas. Chegar às 07h30 na fila já é recomendado.</div>
+              <div class="tl-alert">🔴 ALERTA: Entrada gratuita = filas de 2–3h. Sem reserva online disponível. Quem chegar cedo entra tranquilo. Entrada às 9h, fechamento às 14h (última entrada 12h30).</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">07h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🚶 Fila nos Museus do Vaticano</div>
+              <div class="tl-desc">Viale Vaticano, lado externo das muralhas. Levar água e protetor solar.</div>
+              <a href="https://www.google.com/maps/place/Vatican+Museums" target="_blank" class="map-btn">📍 Museus do Vaticano</a>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">09h00</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏛️ Museus do Vaticano</div>
+              <div class="tl-desc">Roteiro sugerido: Museu Egípcio → Pio Clementino → Galeria dos Mapas → Estâncias de Rafael → Capela Sistina. Reservar ~3h.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">10h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">⛪ Basílica de São Pedro</div>
+              <div class="tl-desc">Entrada gratuita. A maior basílica cristã do mundo. Obra-prima de Michelangelo e Bernini. Vestimenta: ombros e joelhos cobertos.</div>
+              <a href="https://www.google.com/maps/place/St.+Peter%27s+Basilica" target="_blank" class="map-btn">📍 Basílica de São Pedro</a>
+              <div class="tl-alert">👗 Código de vestimenta obrigatório: ombros e joelhos cobertos. Levar lenço ou xale.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">10h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🙏 Missa + Bênção Papa Leão XIV</div>
+              <div class="tl-desc">Missa do Jubileu das Famílias na Praça de São Pedro às 10h30. Papa Leão XIV preside. No final da missa: Regina Caeli (bênção dominical). Participantes de 131 países!</div>
+              <a href="https://www.google.com/maps/place/St.+Peter%27s+Square" target="_blank" class="map-btn">📍 Praça de São Pedro</a>
+              <div class="tl-tip">✅ Confirmado: Papa esteve pessoalmente na Praça de São Pedro no dia 01/06/2025 neste mesmo evento.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">15h00</div></div>
+            <div class="tl-content">
+              <div class="tl-title">🍋 Tarde em Trastevere</div>
+              <div class="tl-desc">O bairro mais charmoso de Roma. Ruelas de paralelepípedos, hera nas paredes, restaurantes autênticos. ~15 min de ônibus do Vaticano (Linha 23).</div>
+              <a href="https://www.google.com/maps/place/Trastevere,+Rome" target="_blank" class="map-btn">📍 Trastevere</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label">Dia 13 · Retorno</div>
+
+    <!-- Dia 13 - Voo retorno -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">01/06 · Seg</div>
+        <div class="day-title">Voo Roma → Guarulhos ✈️</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">04h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🚕 Táxi → Aeroporto Fiumicino</div>
+              <div class="tl-desc">Sair às 04h30. Uber agendado ou Radio Taxi 06.3570. Tarifa fixa €50 para 4 pessoas com malas. ~40 min até o aeroporto.</div>
+              <div class="tl-alert">⚠️ Solicitar ANTES da viagem. Uber permite agendamento até 90 dias antes com preço travado.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">05h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏁 Check-in Fiumicino — Lufthansa</div>
+              <div class="tl-desc">Terminal 3. Embarque internacional — chegar 2h30 antes.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">08h00</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">✈️ DECOLAGEM — LH1873 Lufthansa</div>
+              <div class="tl-desc">FCO → MUC (Munique) | ~2h voo</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">09h35</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🔄 Conexão em Munique (MUC)</div>
+              <div class="tl-desc">Conexão de ~2h25min. Não sair do aeroporto — terminal interno.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">12h00</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">✈️ DECOLAGEM — MUC → GRU</div>
+              <div class="tl-desc">Lufthansa | ~12h voo. Chegada prevista ~19h Guarulhos.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dia 14-15 - Guarulhos -->
+    <div class="day-card">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-date">01–03/06</div>
+        <div class="day-title">Guarulhos → Maringá 🇧🇷</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">01/06</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-title">🏠 Chegada em Guarulhos</div>
+              <div class="tl-desc">~19h — descanso na casa da família.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">03/06</div></div>
+            <div class="tl-content">
+              <div class="tl-title">🚗 ~04h — Saída para Maringá</div>
+              <div class="tl-desc">Viagem de carro de volta a Maringá. Fim da aventura europeia! 🎉</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /panel-roteiro -->
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- PANEL: DESTINOS -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="panel" id="panel-destinos">
+
+    <div class="sec-label">Suíça</div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" class="dest-card-img" alt="Zurique" onerror="this.parentElement.querySelector('.dest-card-img-placeholder') && (this.style.display='none')">
+      <div class="dest-card-body">
+        <h3>🇨🇭 Zurique — Layover de 7h</h3>
+        <p>A maior cidade da Suíça combina modernidade financeira com charme medieval. O Lago de Zurique e a Altstadt (cidade velha) são imperdíveis mesmo em poucas horas.</p>
+        <span class="dest-tag tag-gold">Maio: 12–20°C</span>
+        <span class="dest-tag tag-sage">Moeda: CHF</span>
+        <span class="dest-tag tag-sky">Cartão aceito</span>
+        <br>
+        <a href="https://www.google.com/maps/place/Zurich" target="_blank" class="map-btn" style="margin-top:8px">📍 Zurique no Maps</a>
+      </div>
+    </div>
+
+    <div class="sec-label">Cruzeiro — Grécia</div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=600&q=80" class="dest-card-img" alt="Mykonos" onerror="this.style.display='none'">
+      <div class="dest-card-body">
+        <h3>🇬🇷 Mykonos — 24/05</h3>
+        <p>Ilha das Cíclades famosa por suas casinhas brancas, moinhos de vento e praias deslumbrantes. Exploração livre — ideal a pé pela Chora (cidade velha).</p>
+        <span class="dest-tag tag-gold">Maio: 18–25°C</span>
+        <span class="dest-tag tag-sage">Moeda: Euro (€)</span>
+        <span class="dest-tag tag-sky">Exploração livre</span>
+        <br>
+        <a href="https://www.google.com/maps/place/Mykonos" target="_blank" class="map-btn" style="margin-top:8px">📍 Mykonos no Maps</a>
+      </div>
+    </div>
+
+    <div class="sec-label">Cruzeiro — Turquia</div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1577083552431-6e5fd01988ec?w=600&q=80" class="dest-card-img" alt="Kusadasi" onerror="this.style.display='none'">
+      <div class="dest-card-body">
+        <h3>🇹🇷 Kusadasi / Éfeso — 25/05</h3>
+        <p>Passeio contratado via MSC. Éfeso é uma das cidades romanas mais bem preservadas do mundo — a Biblioteca de Celso é de tirar o fôlego. A Casa de Maria fica a poucos quilômetros.</p>
+        <span class="dest-tag tag-gold">Maio: 20–27°C</span>
+        <span class="dest-tag tag-sage">Moeda: ₺ / € aceito</span>
+        <span class="dest-tag tag-sky">Tour MSC incluso</span>
+        <br>
+        <a href="https://www.google.com/maps/place/Kusadasi" target="_blank" class="map-btn" style="margin-top:8px">📍 Kusadasi no Maps</a>
+      </div>
+    </div>
+
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1589903308904-1010c2294adc?w=600&q=80" class="dest-card-img" alt="Marmaris" onerror="this.style.display='none'">
+      <div class="dest-card-body">
+        <h3>🇹🇷 Marmaris — 26/05</h3>
+        <p>Resort costeiro turco com um dos maiores portos de cruzeiros do país. Bazar animado, castelo histórico e baía de águas turquesa. Exploração livre.</p>
+        <span class="dest-tag tag-gold">Maio: 22–28°C</span>
+        <span class="dest-tag tag-sage">Moeda: ₺ / € aceito</span>
+        <span class="dest-tag tag-sky">Exploração livre</span>
+        <br>
+        <a href="https://www.google.com/maps/place/Marmaris" target="_blank" class="map-btn" style="margin-top:8px">📍 Marmaris no Maps</a>
+      </div>
+    </div>
+
+    <div class="sec-label">Cruzeiro — Itália</div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=600&q=80" class="dest-card-img" alt="Nápoles" onerror="this.style.display='none'">
+      <div class="dest-card-body">
+        <h3>🇮🇹 Nápoles / Pompeia — 28/05</h3>
+        <p>A caótica e apaixonante Nápoles fica ao pé do Vesúvio. Pompeia, soterrada em 79 d.C., é uma viagem no tempo única no mundo. Tour incluso via MSC.</p>
+        <span class="dest-tag tag-gold">Maio: 18–24°C</span>
+        <span class="dest-tag tag-sage">Moeda: Euro (€)</span>
+        <span class="dest-tag tag-sky">Tour MSC incluso</span>
+        <br>
+        <a href="https://www.google.com/maps/place/Naples" target="_blank" class="map-btn" style="margin-top:8px">📍 Nápoles no Maps</a>
+      </div>
+    </div>
+
+    <div class="sec-label">Roma & Vaticano</div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1529154036614-a60975f5c760?w=600&q=80" class="dest-card-img" alt="Roma" onerror="this.style.display='none'">
+      <div class="dest-card-body">
+        <h3>🇮🇹 Roma — 29/05 a 01/06</h3>
+        <p>A Cidade Eterna guarda 3.000 anos de história. Em 3 dias vocês verão o Coliseu, Vaticano, Fontana di Trevi, Pantheon, Trastevere e muito mais. Airbnb já confirmado na Via Principe Amedeo, 132 — a 5 min da Estação Termini.</p>
+        <span class="dest-tag tag-gold">Maio/Jun: 18–28°C</span>
+        <span class="dest-tag tag-sage">Moeda: Euro (€)</span>
+        <span class="dest-tag tag-sky">3 noites</span>
+        <br>
+        <a href="https://www.google.com/maps/place/Rome" target="_blank" class="map-btn" style="margin-top:8px">📍 Roma no Maps</a>
+      </div>
+    </div>
+
+  </div><!-- /panel-destinos -->
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- PANEL: RESTAURANTES -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="panel" id="panel-restaurantes">
+
+    <div class="sec-label">🇨🇭 Zurique — Almoço rápido</div>
+
+    <div class="rest-card">
+      <div class="rest-header"><div class="rest-name">Coop / Migros Self-Service</div><div class="rest-price">€€ · 12–15 CHF</div></div>
+      <div class="rest-cuisine">Self-service · Supermercado premium</div>
+      <div class="rest-desc">Melhor custo-benefício em Zurique. Pratos quentes, saladas e sopas. Várias unidades perto da estação central e do lago.</div>
+      <div class="rest-location">📍 Zürich HB (estação) e entorno do lago</div>
+      <a href="https://www.google.com/maps/search/Coop+Restaurant+Zurich" target="_blank" class="map-btn">📍 Ver no Maps</a>
+    </div>
+
+    <div class="rest-card">
+      <div class="rest-header"><div class="rest-name">Rheinfelder Bierhalle</div><div class="rest-price">€€ · 20–30 CHF</div></div>
+      <div class="rest-cuisine">Culinária suíça tradicional</div>
+      <div class="rest-desc">Ambiente histórico, cervejas locais e comida típica como rösti e bratwurst. Ótimo para uma refeição autêntica rápida.</div>
+      <div class="rest-location">📍 Niederdorfstrasse, Zurique</div>
+      <a href="https://www.google.com/maps/place/Rheinfelder+Bierhalle+Zurich" target="_blank" class="map-btn">📍 Ver no Maps</a>
+    </div>
+
+    <div class="sec-label">🇬🇷 Mykonos</div>
+
+    <div class="rest-card">
+      <div class="rest-header"><div class="rest-name">Gioras Bakery</div><div class="rest-price">€ · Barato</div></div>
+      <div class="rest-cuisine">Padaria grega tradicional</div>
+      <div class="rest-desc">A mais antiga padaria de Mykonos. Pão fresquíssimo, tiropita (torta de queijo) e loukoumades (bolinho de mel). Fila de locais — ótimo sinal.</div>
+      <div class="rest-location">📍 Mykonos Town (Chora)</div>
+      <a href="https://www.google.com/maps/place/Gioras+Bakery+Mykonos" target="_blank" class="map-btn">📍 Ver no Maps</a>
+    </div>
+
+    <div class="rest-card">
+      <div class="rest-header"><div class="rest-name">Antonini Restaurant</div><div class="rest-price">€€ · 20–35€</div></div>
+      <div class="rest-cuisine">Frutos do mar gregos</div>
+      <div class="rest-desc">Polvo grelhado, camarão fresco e moussaka com vista para o porto. Frutos do mar na Grécia = obrigatório.</div>
+      <div class="rest-location">📍 Orla de Mykonos Town</div>
+      <a href="https://www.google.com/maps/search/Antonini+Restaurant+Mykonos" target="_blank" class="map-btn">📍 Ver no Maps</a>
+    </div>
+
+    <div class="sec-label">🇹🇷 Kusadasi / Marmaris</div>
+
+    <div class="rest-card">
+      <div class="rest-header"><div class="rest-name">Kaleiçi Mutfağı (Kusadasi)</div><div class="rest-price">€ · 8–15€</div></div>
+      <div class="rest-cuisine">Culinária turca local</div>
+      <div class="rest-desc">Kebabs, pide (pizza turca), mercimek çorbası (sopa de lentilha). Culinária turca é abundante e muito barata.</div>
+      <div class="rest-location">📍 Centro de Kusadasi</div>
+      <a href="https://www.google.com/maps/search/restaurant+Kusadasi+Turkish" target="_blank" class="map-btn">📍 Ver no Maps</a>
+    </div>
+
+    <div class="rest-card">
+      <div class="rest-header"><div class="rest-name">Pineapple Restaurant (Marmaris)</div><div class="rest-price">€€ · 15–25€</div></div>
+      <div class="rest-cuisine">Frutos do mar turcos</div>
+      <div class="rest-desc">Vista para a marina, peixes frescos do Mediterrâneo. Turquia tem frutos do mar excelentes e mais baratos que a Grécia.</div>
+      <div class="rest-location">📍 Orla de Marmaris</div>
+      <a href="https://www.google.com/maps/search/Pineapple+Restaurant+Marmaris" target="_blank" class="map-btn">📍 Ver no Maps</a>
+    </div>
+
+    <div class="sec-label">🇮🇹 Roma</div>
+
+    <div class="rest-card">
+      <div class="rest-header"><div class="rest-name">Tonnarello</div><div class="rest-price">€€ · 15–25€</div></div>
+      <div class="rest-cuisine">Culinária romana clássica · Trastevere</div>
+      <div class="rest-desc">O mais tradicional de Trastevere. Cacio e pepe, carbonara e supplì autênticos. Fila na porta — reserva recomendada para grupos.</div>
+      <div class="rest-location">📍 Via della Paglia, 1 — Trastevere</div>
+      <a href="https://www.google.com/maps/place/Tonnarello+Rome" target="_blank" class="map-btn">📍 Ver no Maps</a>
+    </div>
+
+    <div class="rest-card">
+      <div class="rest-header"><div class="rest-name">Osteria dell'Angelo</div><div class="rest-price">€€ · 15–20€</div></div>
+      <div class="rest-cuisine">Trattoria romana · Prati (Vaticano)</div>
+      <div class="rest-desc">Perfeito para almoçar após o Vaticano. Cozinha caseira romana, menu fixo com abruzzesi e coda alla vaccinara. Adorado por locais.</div>
+      <div class="rest-location">📍 Via G. Bettolo, 24 — Prati</div>
+      <a href="https://www.google.com/maps/place/Osteria+Dell'angelo+Rome" target="_blank" class="map-btn">📍 Ver no Maps</a>
+    </div>
+
+    <div class="rest-card">
+      <div class="rest-header"><div class="rest-name">Pizzarium Bonci</div><div class="rest-price">€ · 5–12€</div></div>
+      <div class="rest-cuisine">Pizza al taglio · Prati</div>
+      <div class="rest-desc">Considerado a melhor pizza al taglio de Roma. Perto do Vaticano. Paga pelo peso. Ideal para almoço rápido e barato.</div>
+      <div class="rest-location">📍 Via della Meloria, 43 — Prati</div>
+      <a href="https://www.google.com/maps/place/Pizzarium" target="_blank" class="map-btn">📍 Ver no Maps</a>
+    </div>
+
+    <div class="rest-card">
+      <div class="rest-header"><div class="rest-name">Supplì Roma</div><div class="rest-price">€ · 3–8€</div></div>
+      <div class="rest-cuisine">Street food romano · Trastevere</div>
+      <div class="rest-desc">Supplì (bolinha de arroz frita com queijo) é o street food mais romano que existe. Comer em pé na porta é parte da experiência.</div>
+      <div class="rest-location">📍 Via di San Francesco a Ripa — Trastevere</div>
+      <a href="https://www.google.com/maps/place/Supplì+Roma" target="_blank" class="map-btn">📍 Ver no Maps</a>
+    </div>
+
+    <div class="rest-card">
+      <div class="rest-header"><div class="rest-name">Gelateria dei Gracchi</div><div class="rest-price">€ · 3–5€</div></div>
+      <div class="rest-cuisine">Gelato artesanal · Prati</div>
+      <div class="rest-desc">Eleita várias vezes melhor gelato de Roma. Ingredientes naturais, sem corantes. Imperdível no calor de maio/junho.</div>
+      <div class="rest-location">📍 Via dei Gracchi, 272 — Prati</div>
+      <a href="https://www.google.com/maps/place/Gelateria+dei+Gracchi" target="_blank" class="map-btn">📍 Ver no Maps</a>
+    </div>
+
+  </div><!-- /panel-restaurantes -->
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- PANEL: TRANSPORTE -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="panel" id="panel-transporte">
+
+    <div class="sec-label">🇨🇭 Zurique — Aeroporto ao Centro</div>
+    <div class="transport-card">
+      <div class="transport-header">ZRH Aeroporto → Zürich HB (Centro)</div>
+      <div class="transport-body">
+        <div class="transport-option">
+          <div class="transport-icon">🚆</div>
+          <div class="transport-info">
+            <h4>S-Bahn (trem urbano) ⭐ Recomendado</h4>
+            <p>Saída do terminal subterrâneo do aeroporto. Direto para Zürich HB. ~10 min. Frequência: a cada 10 min.</p>
+          </div>
+          <div class="transport-price">~4 CHF</div>
+        </div>
+        <div class="transport-option">
+          <div class="transport-icon">🚕</div>
+          <div class="transport-info">
+            <h4>Táxi / Uber</h4>
+            <p>~20–25 min. Mais caro mas confortável para 4 pessoas com malas.</p>
+          </div>
+          <div class="transport-price">~40–50 CHF</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label">🇮🇹 Civitavecchia → Roma</div>
+    <div class="transport-card">
+      <div class="transport-header">Porto Civitavecchia → Roma Termini</div>
+      <div class="transport-body">
+        <div class="transport-option">
+          <div class="transport-icon">🚆</div>
+          <div class="transport-info">
+            <h4>Trem FL5 ⭐ Recomendado</h4>
+            <p>Estação de trem fica dentro do porto. Direto para Roma Termini. ~1h15. Frequência: a cada 30–60 min. Comprar no guichê ou app Trenitalia.</p>
+          </div>
+          <div class="transport-price">~€7 p/p</div>
+        </div>
+        <div class="transport-option">
+          <div class="transport-icon">🚌</div>
+          <div class="transport-info">
+            <h4>Shuttle Bus</h4>
+            <p>Algumas companhias operam shuttle do porto ao centro. Menos frequente que o trem.</p>
+          </div>
+          <div class="transport-price">~€10 p/p</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label">🇮🇹 Fiumicino ↔ Roma Centro</div>
+    <div class="transport-card">
+      <div class="transport-header">Aeroporto FCO ↔ Roma Termini</div>
+      <div class="transport-body">
+        <div class="transport-option">
+          <div class="transport-icon">🚆</div>
+          <div class="transport-info">
+            <h4>Leonardo Express</h4>
+            <p>Direto FCO → Termini em 32 min. Saída a cada 30 min. Das 6h38 às 23h38.</p>
+          </div>
+          <div class="transport-price">€14 p/p</div>
+        </div>
+        <div class="transport-option">
+          <div class="transport-icon">🚌</div>
+          <div class="transport-info">
+            <h4>SIT Bus Shuttle</h4>
+            <p>FCO → Termini (via Vaticano). ~1h. €7 por pessoa. Ônibus 24h. Opção econômica.</p>
+          </div>
+          <div class="transport-price">€7 p/p</div>
+        </div>
+        <div class="transport-option">
+          <div class="transport-icon">🌙</div>
+          <div class="transport-info">
+            <h4>Ônibus noturno Cotral</h4>
+            <p>Para horários madrugada. FCO → Termini/Tiburtina. ~45 min.</p>
+          </div>
+          <div class="transport-price">€5 p/p</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label">🚕 Táxis Roma → Fiumicino (01/06 — 04h30)</div>
+
+    <div class="taxi-card">
+      <div class="taxi-icon">📱</div>
+      <div class="taxi-info">
+        <h4>Uber — Agendar com antecedência</h4>
+        <p>Permite reservar até 90 dias antes com preço travado. Cancelamento gratuito até 1h antes. Melhor opção para madrugada com 4 pessoas.</p>
+        <span class="taxi-badge badge-recommended">⭐ Mais recomendado</span>
+        <br><a href="https://uber.com" target="_blank" class="map-btn" style="margin-top:6px">📲 Acessar Uber</a>
+      </div>
+    </div>
+
+    <div class="taxi-card">
+      <div class="taxi-icon">🚕</div>
+      <div class="taxi-info">
+        <h4>Radio Taxi 06.3570 — Táxi oficial Roma</h4>
+        <p>Ligar ou usar app itTaxi. Tarifa fixa €50 até o aeroporto para destinos dentro das Muralhas Aurelianas. Válido para 4 pessoas + malas.</p>
+        <span class="taxi-badge badge-official">Oficial "Comune di Roma"</span>
+      </div>
+    </div>
+
+    <div class="taxi-card">
+      <div class="taxi-icon">🚐</div>
+      <div class="taxi-info">
+        <h4>Rome Airport Shuttle — Transfer privado</h4>
+        <p>Motorista busca no endereço. Pré-agendado. Bom para grupos. Comparar preço ao do táxi oficial.</p>
+        <br><a href="https://www.fiumicino-shuttle.com" target="_blank" class="map-btn" style="margin-top:6px">🔗 fiumicino-shuttle.com</a>
+      </div>
+    </div>
+
+    <div class="sec-label">🗺️ Roma — Transporte interno</div>
+    <div class="transport-card">
+      <div class="transport-header">Metrô e Ônibus em Roma</div>
+      <div class="transport-body">
+        <div class="transport-option">
+          <div class="transport-icon">🚇</div>
+          <div class="transport-info">
+            <h4>Metrô Roma (Linhas A e B)</h4>
+            <p>Linha A: Termini → Ottaviano (Vaticano). Linha B: Termini → Colosseo. Bilhete único €1.50 (90 min).</p>
+          </div>
+          <div class="transport-price">€1.50</div>
+        </div>
+        <div class="transport-option">
+          <div class="transport-icon">🦶</div>
+          <div class="transport-info">
+            <h4>A pé ⭐ Melhor opção no centro</h4>
+            <p>Trevi → Pantheon: 8 min. Pantheon → Campo de' Fiori: 10 min. Roma histórica é muito compacta e caminhável.</p>
+          </div>
+          <div class="transport-price">Grátis</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /panel-transporte -->
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- PANEL: CLIMA -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="panel" id="panel-clima">
+
+    <div class="weather-banner">
+      <div class="wb-top">
+        <div>
+          <div class="wb-city" id="wb-city">Carregando...</div>
+          <div class="wb-temp" id="wb-temp">--°C</div>
+          <div class="wb-desc" id="wb-desc">...</div>
+        </div>
+        <div class="wb-icon" id="wb-icon">🌤️</div>
+      </div>
+      <div class="wb-details">
+        <div class="wb-detail">Sensação<span id="wb-feels">--°</span></div>
+        <div class="wb-detail">Umidade<span id="wb-hum">--%</span></div>
+        <div class="wb-detail">Vento<span id="wb-wind">-- km/h</span></div>
+      </div>
+      <div class="wb-selector">
+        <button class="wb-btn active" onclick="loadWeather('Roma',41.9,12.5,this)">🇮🇹 Roma</button>
+        <button class="wb-btn" onclick="loadWeather('Zurique',47.37,8.54,this)">🇨🇭 Zurique</button>
+        <button class="wb-btn" onclick="loadWeather('Mykonos',37.44,25.32,this)">🇬🇷 Mykonos</button>
+        <button class="wb-btn" onclick="loadWeather('Kusadasi',37.85,27.26,this)">🇹🇷 Kusadasi</button>
+        <button class="wb-btn" onclick="loadWeather('Marmaris',36.85,28.27,this)">🇹🇷 Marmaris</button>
+        <button class="wb-btn" onclick="loadWeather('Napoles',40.85,14.27,this)">🇮🇹 Nápoles</button>
+      </div>
+    </div>
+
+    <div class="sec-label">Clima esperado em maio/junho</div>
+
+    <div class="practical-card">
+      <h3>🇨🇭 Zurique (21/05)</h3>
+      <div class="practical-row"><div class="practical-label">Temperatura</div><div class="practical-value">12–20°C</div></div>
+      <div class="practical-row"><div class="practical-label">Chuva</div><div class="practical-value">Possível — levar casaco leve</div></div>
+      <div class="practical-row"><div class="practical-label">O que vestir</div><div class="practical-value">Camadas: camiseta + jaqueta leve</div></div>
+    </div>
+
+    <div class="practical-card">
+      <h3>🇬🇷 Mykonos (24/05)</h3>
+      <div class="practical-row"><div class="practical-label">Temperatura</div><div class="practical-value">18–25°C</div></div>
+      <div class="practical-row"><div class="practical-label">Chuva</div><div class="practical-value">Muito improvável</div></div>
+      <div class="practical-row"><div class="practical-label">O que vestir</div><div class="practical-value">Roupas leves, protetor solar obrigatório</div></div>
+    </div>
+
+    <div class="practical-card">
+      <h3>🇹🇷 Turquia (25–26/05)</h3>
+      <div class="practical-row"><div class="practical-label">Temperatura</div><div class="practical-value">20–28°C</div></div>
+      <div class="practical-row"><div class="practical-label">Chuva</div><div class="practical-value">Rara em maio</div></div>
+      <div class="practical-row"><div class="practical-label">O que vestir</div><div class="practical-value">Leve. Mulheres: cobrir ombros em locais religiosos</div></div>
+    </div>
+
+    <div class="practical-card">
+      <h3>🇮🇹 Roma (29/05 – 01/06)</h3>
+      <div class="practical-row"><div class="practical-label">Temperatura</div><div class="practical-value">18–28°C</div></div>
+      <div class="practical-row"><div class="practical-label">Chuva</div><div class="practical-value">Possível — guarda-chuva compacto</div></div>
+      <div class="practical-row"><div class="practical-label">O que vestir</div><div class="practical-value">Leve + camada para noite. Joelhos/ombros cobertos no Vaticano</div></div>
+    </div>
+
+    <div class="sec-label">Dicas práticas gerais</div>
+    <div class="practical-card">
+      <h3>💳 Moedas e pagamentos</h3>
+      <div class="practical-row"><div class="practical-label">Suíça</div><div class="practical-value">CHF — Wise/Bradesco aceitos</div></div>
+      <div class="practical-row"><div class="practical-label">Grécia</div><div class="practical-value">Euro (€) — Cartão amplamente aceito</div></div>
+      <div class="practical-row"><div class="practical-label">Turquia</div><div class="practical-value">₺ Lira — € aceito em turismo</div></div>
+      <div class="practical-row"><div class="practical-label">Itália</div><div class="practical-value">Euro (€) — Cartão aceito em quase tudo</div></div>
+    </div>
+
+    <div class="practical-card">
+      <h3>🔌 Adaptadores</h3>
+      <div class="practical-row"><div class="practical-label">Europa (Itália, Grécia)</div><div class="practical-value">Tipo C/F (2 pinos redondos)</div></div>
+      <div class="practical-row"><div class="practical-label">Suíça</div><div class="practical-value">Tipo J (exclusivo suíço!) — levar adaptador</div></div>
+      <div class="practical-row"><div class="practical-label">Turquia</div><div class="practical-value">Tipo C/F — mesmo da Europa</div></div>
+    </div>
+
+  </div><!-- /panel-clima -->
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- PANEL: FRASES -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="panel" id="panel-frases">
+
+    <div class="phrase-section">
+      <div class="phrase-lang-header">
+        <div class="phrase-lang-flag">🇮🇹</div>
+        <div class="phrase-lang-name">Italiano</div>
+      </div>
+      <div class="phrase-card">
+        <div class="phrase-row" style="background:rgba(184,151,74,0.05);font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase">
+          <div class="phrase-pt" style="color:var(--gold)">Português</div>
+          <div class="phrase-local" style="color:var(--gold)">Italiano</div>
+          <div class="phrase-phonetic" style="color:var(--gold)">Como falar</div>
+        </div>
+        <div class="phrase-row"><div class="phrase-pt">Bom dia</div><div class="phrase-local">Buongiorno</div><div class="phrase-phonetic">buon-DJORno</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Por favor</div><div class="phrase-local">Per favore</div><div class="phrase-phonetic">per fa-VO-re</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Obrigado/a</div><div class="phrase-local">Grazie</div><div class="phrase-phonetic">GRA-tsie</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Desculpe</div><div class="phrase-local">Mi scusi</div><div class="phrase-phonetic">mi ZCOO-zi</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Quanto custa?</div><div class="phrase-local">Quanto costa?</div><div class="phrase-phonetic">KWAN-to KOS-ta</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Onde fica...?</div><div class="phrase-local">Dov'è...?</div><div class="phrase-phonetic">do-VE</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Cardápio, por favor</div><div class="phrase-local">Il menù, per favore</div><div class="phrase-phonetic">il me-NU per fa-VO-re</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Conta, por favor</div><div class="phrase-local">Il conto, per favore</div><div class="phrase-phonetic">il KON-to</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Não entendo</div><div class="phrase-local">Non capisco</div><div class="phrase-phonetic">non ka-PIS-co</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Chame a polícia!</div><div class="phrase-local">Chiami la polizia!</div><div class="phrase-phonetic">KYA-mi la po-LI-tsia</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Preciso de um médico</div><div class="phrase-local">Ho bisogno di un medico</div><div class="phrase-phonetic">o bi-ZO-nyo di un ME-di-co</div></div>
+      </div>
+    </div>
+
+    <div class="phrase-section">
+      <div class="phrase-lang-header">
+        <div class="phrase-lang-flag">🇬🇷</div>
+        <div class="phrase-lang-name">Grego</div>
+      </div>
+      <div class="phrase-card">
+        <div class="phrase-row" style="background:rgba(184,151,74,0.05);font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase">
+          <div class="phrase-pt" style="color:var(--gold)">Português</div>
+          <div class="phrase-local" style="color:var(--gold)">Grego</div>
+          <div class="phrase-phonetic" style="color:var(--gold)">Como falar</div>
+        </div>
+        <div class="phrase-row"><div class="phrase-pt">Olá</div><div class="phrase-local">Γεια σου (Yeia sou)</div><div class="phrase-phonetic">YA-su</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Obrigado/a</div><div class="phrase-local">Ευχαριστώ</div><div class="phrase-phonetic">ef-ha-ri-STO</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Por favor</div><div class="phrase-local">Παρακαλώ</div><div class="phrase-phonetic">pa-ra-ka-LO</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Sim / Não</div><div class="phrase-local">Ναι / Όχι</div><div class="phrase-phonetic">NE / O-hi</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Quanto custa?</div><div class="phrase-local">Πόσο κάνει;</div><div class="phrase-phonetic">PO-so KA-ni</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Água</div><div class="phrase-local">Νερό</div><div class="phrase-phonetic">ne-RO</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Belo / Lindo</div><div class="phrase-local">Ωραίο</div><div class="phrase-phonetic">o-RE-o</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Saúde! (brinde)</div><div class="phrase-local">Υγεία!</div><div class="phrase-phonetic">YI-ya</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Ajuda!</div><div class="phrase-local">Βοήθεια!</div><div class="phrase-phonetic">vo-I-thia</div></div>
+      </div>
+    </div>
+
+    <div class="phrase-section">
+      <div class="phrase-lang-header">
+        <div class="phrase-lang-flag">🇹🇷</div>
+        <div class="phrase-lang-name">Turco</div>
+      </div>
+      <div class="phrase-card">
+        <div class="phrase-row" style="background:rgba(184,151,74,0.05);font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase">
+          <div class="phrase-pt" style="color:var(--gold)">Português</div>
+          <div class="phrase-local" style="color:var(--gold)">Turco</div>
+          <div class="phrase-phonetic" style="color:var(--gold)">Como falar</div>
+        </div>
+        <div class="phrase-row"><div class="phrase-pt">Olá</div><div class="phrase-local">Merhaba</div><div class="phrase-phonetic">mer-HA-ba</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Obrigado/a</div><div class="phrase-local">Teşekkür ederim</div><div class="phrase-phonetic">te-shek-KUR e-de-RIM</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Por favor</div><div class="phrase-local">Lütfen</div><div class="phrase-phonetic">LUT-fen</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Sim / Não</div><div class="phrase-local">Evet / Hayır</div><div class="phrase-phonetic">e-VET / ha-YIR</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Quanto custa?</div><div class="phrase-local">Ne kadar?</div><div class="phrase-phonetic">ne ka-DAR</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Mais barato</div><div class="phrase-local">Daha ucuz</div><div class="phrase-phonetic">DA-ha u-DJUZ</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Muito caro!</div><div class="phrase-local">Çok pahalı!</div><div class="phrase-phonetic">CHOK pa-ha-LI</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Ajuda!</div><div class="phrase-local">İmdat!</div><div class="phrase-phonetic">im-DAT</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Saúde! (brinde)</div><div class="phrase-local">Şerefe!</div><div class="phrase-phonetic">she-RE-fe</div></div>
+        <div class="phrase-row"><div class="phrase-pt">Boa viagem</div><div class="phrase-local">İyi yolculuklar</div><div class="phrase-phonetic">i-YI yol-djul-UK-lar</div></div>
+      </div>
+    </div>
+
+  </div><!-- /panel-frases -->
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- PANEL: EMERGÊNCIA -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="panel" id="panel-emergencia">
+
+    <div style="background:rgba(139,74,46,0.08);border:1px solid rgba(139,74,46,0.3);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--rust);line-height:1.6;">
+      🔴 <strong>Em qualquer emergência grave na Europa:</strong> ligue <strong>112</strong> (número único de emergência em toda a UE e Turquia). Gratuito, funciona mesmo sem crédito.
+    </div>
+
+    <div class="emerg-card">
+      <div class="emerg-country"><div class="emerg-flag">🇨🇭</div><div class="emerg-name">Suíça</div></div>
+      <div class="emerg-row"><div class="emerg-label">Emergências geral</div><div class="emerg-value"><a href="tel:112">112</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Polícia</div><div class="emerg-value"><a href="tel:117">117</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Ambulância</div><div class="emerg-value"><a href="tel:144">144</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Bombeiros</div><div class="emerg-value"><a href="tel:118">118</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Consulado BR em Berna</div><div class="emerg-value"><a href="tel:+41313713515">+41 31 371-3515</a></div></div>
+    </div>
+
+    <div class="emerg-card">
+      <div class="emerg-country"><div class="emerg-flag">🇬🇷</div><div class="emerg-name">Grécia</div></div>
+      <div class="emerg-row"><div class="emerg-label">Emergências geral</div><div class="emerg-value"><a href="tel:112">112</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Polícia</div><div class="emerg-value"><a href="tel:100">100</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Ambulância</div><div class="emerg-value"><a href="tel:166">166</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Guarda Costeira</div><div class="emerg-value"><a href="tel:108">108</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Consulado BR em Atenas</div><div class="emerg-value"><a href="tel:+302107213951">+30 210 721-3951</a></div></div>
+    </div>
+
+    <div class="emerg-card">
+      <div class="emerg-country"><div class="emerg-flag">🇹🇷</div><div class="emerg-name">Turquia</div></div>
+      <div class="emerg-row"><div class="emerg-label">Emergências geral</div><div class="emerg-value"><a href="tel:112">112</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Polícia</div><div class="emerg-value"><a href="tel:155">155</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Ambulância</div><div class="emerg-value"><a href="tel:112">112</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Bombeiros</div><div class="emerg-value"><a href="tel:110">110</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Embaixada BR em Ancara</div><div class="emerg-value"><a href="tel:+903124426815">+90 312 442-6815</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Consulado BR em Istambul</div><div class="emerg-value"><a href="tel:+902122510196">+90 212 251-0196</a></div></div>
+    </div>
+
+    <div class="emerg-card">
+      <div class="emerg-country"><div class="emerg-flag">🇮🇹</div><div class="emerg-name">Itália (Roma)</div></div>
+      <div class="emerg-row"><div class="emerg-label">Emergências geral</div><div class="emerg-value"><a href="tel:112">112</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Polícia</div><div class="emerg-value"><a href="tel:113">113</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Ambulância</div><div class="emerg-value"><a href="tel:118">118</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Bombeiros</div><div class="emerg-value"><a href="tel:115">115</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Embaixada BR em Roma</div><div class="emerg-value"><a href="tel:+390698441">+39 06 984-41</a></div></div>
+      <div class="emerg-row"><div class="emerg-label">Taxi Roma (Radio Taxi)</div><div class="emerg-value"><a href="tel:+390635701">06.3570</a></div></div>
+    </div>
+
+    <div class="sec-label">Informações importantes</div>
+    <div class="practical-card">
+      <h3>🏥 Saúde</h3>
+      <div class="practical-row"><div class="practical-label">Seguro viagem</div><div class="practical-value">Guardar número do seguro no celular</div></div>
+      <div class="practical-row"><div class="practical-label">Farmácia Italia</div><div class="practical-value">Cruz verde iluminada = Farmacia</div></div>
+      <div class="practical-row"><div class="practical-label">Farmácia Grécia</div><div class="practical-value">Cruz verde = Φαρμακείο</div></div>
+      <div class="practical-row"><div class="practical-label">Farmácia Turquia</div><div class="practical-value">Cruz vermelha = Eczane</div></div>
+    </div>
+
+    <div class="practical-card">
+      <h3>🛂 Documentos</h3>
+      <div class="practical-row"><div class="practical-label">Passaporte</div><div class="practical-value">Foto digital como backup</div></div>
+      <div class="practical-row"><div class="practical-label">Seguro viagem</div><div class="practical-value">Print + digital acessível offline</div></div>
+      <div class="practical-row"><div class="practical-label">Reservas</div><div class="practical-value">Hotel, cruzeiro e voos salvos offline</div></div>
+    </div>
+
+  </div><!-- /panel-emergencia -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <div class="bottom-nav-item active" onclick="showPanel('roteiro'); setBottomNav(0); setTopNavByIndex(0)">
+      <div class="bnav-icon">🗓️</div>
+      <div class="bnav-label">Roteiro</div>
+    </div>
+    <div class="bottom-nav-item" onclick="showPanel('destinos'); setBottomNav(1); setTopNavByIndex(1)">
+      <div class="bnav-icon">🗺️</div>
+      <div class="bnav-label">Destinos</div>
+    </div>
+    <div class="bottom-nav-item" onclick="showPanel('restaurantes'); setBottomNav(2); setTopNavByIndex(2)">
+      <div class="bnav-icon">🍽️</div>
+      <div class="bnav-label">Restaurantes</div>
+    </div>
+    <div class="bottom-nav-item" onclick="showPanel('transporte'); setBottomNav(3); setTopNavByIndex(3)">
+      <div class="bnav-icon">🚆</div>
+      <div class="bnav-label">Transporte</div>
+    </div>
+    <div class="bottom-nav-item" onclick="showPanel('clima'); setBottomNav(4); setTopNavByIndex(4)">
+      <div class="bnav-icon">🌤️</div>
+      <div class="bnav-label">Clima</div>
+    </div>
+    <div class="bottom-nav-item" onclick="showPanel('frases'); setBottomNav(5); setTopNavByIndex(5)">
+      <div class="bnav-icon">💬</div>
+      <div class="bnav-label">Frases</div>
+    </div>
+    <div class="bottom-nav-item" onclick="showPanel('emergencia'); setBottomNav(6); setTopNavByIndex(6)">
+      <div class="bnav-icon">🆘</div>
+      <div class="bnav-label">SOS</div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('btn-entrar').addEventListener('click', function() {
+    document.getElementById('splash').classList.add('hidden');
+    document.getElementById('app').classList.add('visible');
+    document.getElementById('app').style.display = 'block';
+    loadWeather('Roma', 41.9, 12.5, null);
+  });
+});
+
+function toggleDay(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.day-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('panel-' + name);
+  if (target) target.classList.add('active');
+}
+
+function setBottomNav(idx) {
+  document.querySelectorAll('.bottom-nav-item').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
+}
+
+function setTopNav(el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function setTopNavByIndex(idx) {
+  const items = document.querySelectorAll('.nav-item');
+  items.forEach((el, i) => el.classList.toggle('active', i === idx));
+}
+
+async function loadWeather(city, lat, lon, btn) {
+  if (btn) {
+    document.querySelectorAll('.wb-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  // Update topbar city name
+  document.getElementById('tw-city').textContent = city;
+  document.getElementById('tw-temp').textContent = '...';
+  document.getElementById('tw-desc').textContent = 'carregando';
+
+  try {
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&wind_speed_unit=kmh&timezone=auto`);
+    const data = await res.json();
+    const c = data.current;
+    const temp = Math.round(c.temperature_2m);
+    const feels = Math.round(c.apparent_temperature);
+    const hum = c.relative_humidity_2m;
+    const wind = Math.round(c.wind_speed_10m);
+    const wcode = c.weather_code;
+
+    const icons = {
+      0:'☀️', 1:'🌤️', 2:'⛅', 3:'☁️',
+      45:'🌫️', 48:'🌫️',
+      51:'🌦️', 53:'🌦️', 55:'🌧️',
+      61:'🌧️', 63:'🌧️', 65:'🌧️',
+      71:'🌨️', 73:'🌨️', 75:'❄️',
+      80:'🌦️', 81:'🌦️', 82:'⛈️',
+      95:'⛈️', 96:'⛈️', 99:'⛈️'
+    };
+    const descs = {
+      0:'Céu limpo', 1:'Principalmente limpo', 2:'Parcialmente nublado', 3:'Nublado',
+      45:'Névoa', 48:'Névoa de gelo',
+      51:'Chuvisco leve', 53:'Chuvisco moderado', 55:'Chuvisco intenso',
+      61:'Chuva leve', 63:'Chuva moderada', 65:'Chuva forte',
+      80:'Pancadas leves', 81:'Pancadas moderadas', 82:'Tempestade',
+      95:'Trovoada', 96:'Trovoada c/ granizo', 99:'Trovoada forte'
+    };
+    const icon = icons[wcode] || '🌤️';
+    const desc = descs[wcode] || 'Variável';
+
+    // topbar
+    document.getElementById('tw-temp').textContent = temp + '°';
+    document.getElementById('tw-desc').textContent = desc;
+
+    // weather panel banner
+    document.getElementById('wb-city').textContent = city.toUpperCase();
+    document.getElementById('wb-temp').textContent = temp + '°C';
+    document.getElementById('wb-desc').textContent = desc;
+    document.getElementById('wb-icon').textContent = icon;
+    document.getElementById('wb-feels').textContent = feels + '°';
+    document.getElementById('wb-hum').textContent = hum + '%';
+    document.getElementById('wb-wind').textContent = wind + ' km/h';
+  } catch(e) {
+    document.getElementById('tw-temp').textContent = '--°';
+    document.getElementById('tw-desc').textContent = 'sem conexão';
+    document.getElementById('wb-temp').textContent = '--°C';
+    document.getElementById('wb-desc').textContent = 'Sem conexão com internet';
+  }
+}
+</script>
+</body>
+</html>
