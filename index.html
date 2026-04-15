@@ -511,44 +511,199 @@ body {
       <div class="day-body">
         <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" class="dest-image" alt="Zurique" onerror="this.style.display='none'">
         <div class="timeline">
+
+          <!-- CHEGADA -->
           <div class="tl-item">
             <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">10h40</div><div class="tl-line"></div></div>
             <div class="tl-content">
               <div class="tl-title">🛬 Chegada em Zurique (ZRH)</div>
-              <div class="tl-desc">Conexão de ~7h. Ótima oportunidade para explorar a cidade.</div>
+              <div class="tl-desc">Conexão de ~7h. Hora de explorar a cidade!</div>
             </div>
           </div>
+
+          <!-- LOCKER -->
           <div class="tl-item">
             <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">11h00</div><div class="tl-line"></div></div>
             <div class="tl-content">
               <div class="tl-title">🧳 Guardar malas — Locker no Aeroporto</div>
-              <div class="tl-desc">Gepäckaufbewahrung no próprio aeroporto (piso térreo perto do trilho). Aceitam cartão Wise/Bradesco. ~10–15 CHF/mala.</div>
+              <div class="tl-desc">Gepäckaufbewahrung no piso térreo perto do trilho. Aceita cartão Wise/Bradesco. ~10–15 CHF/mala.</div>
             </div>
           </div>
+
+          <!-- TREM -->
           <div class="tl-item">
             <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">11h20</div><div class="tl-line"></div></div>
             <div class="tl-content">
-              <div class="tl-title">🚆 Trem Aeroporto → Centro</div>
-              <div class="tl-desc">Linha S-Bahn direto ao Zürich HB (Estação Central). ~10 min, ~4 CHF por pessoa.</div>
-              <a href="https://www.google.com/maps/dir/Zurich+Airport/Zürich+HB" target="_blank" class="map-btn">📍 Ver rota no Maps</a>
+              <div class="tl-title">🚆 Trem Aeroporto → Zürich HB</div>
+              <div class="tl-desc">Linha S-Bahn direto à Estação Central. ~10 min, ~4 CHF por pessoa.</div>
+              <a href="https://www.google.com/maps/dir/Zurich+Airport/Z%C3%BCrich+HB/@47.4133,8.5484,13z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x479100c0bbf30b41:0x18a44bef02ef04a8!2m2!1d8.5625!2d47.4502!1m5!1m1!1s0x47900a08cc0e6193:0x2900d3b049243a3d!2m2!1d8.5401!2d47.3779!3e3" target="_blank" class="map-btn">📍 Rota no Maps</a>
             </div>
           </div>
-          <div class="tl-item">
-            <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">12h–15h</div><div class="tl-line"></div></div>
+
+          <!-- ZÜRICH HB LABEL -->
+          <div style="background:rgba(184,151,74,0.08);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:7px 10px;margin:4px 0 10px 0;font-size:11px;color:var(--gold);font-weight:500;">
+            🗺️ A partir daqui tudo a pé — roteiro pelo centro histórico
+          </div>
+
+          <!-- PARADA 1: BAHNHOFSTRASSE -->
+          <div class="tl-item" id="zhr-stop-1">
+            <div class="tl-left"><div class="tl-dot" id="dot-zhr1" style="background:var(--gold)"></div><div class="tl-time">11h40</div><div class="tl-line"></div></div>
             <div class="tl-content">
-              <div class="tl-title">🏞️ Lago de Zurique</div>
-              <div class="tl-desc">A 15 min a pé da estação central. Passeio pelo Bürkliplatz e orla do lago. Vista dos Alpes em dias claros.</div>
-              <a href="https://www.google.com/maps/place/Lake+Zurich" target="_blank" class="map-btn">📍 Lago de Zurique</a>
-              <div class="tl-tip">🍽️ Almoço barato: Supermer. Coop ou Migros perto da estação — self-service por 12–15 CHF. Ou Niederdorfstrasse para opções variadas.</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <div class="tl-title">🛍️ Bahnhofstrasse</div>
+                <button onclick="checkStop('zhr1')" id="btn-zhr1" style="background:var(--gold);color:var(--ink);border:none;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0">✓ Check</button>
+              </div>
+              <div class="tl-desc">Rua principal de Zurique (~1,4 km). Passeio a pé da estação até o lago. Parada obrigatória na <strong>Läderach</strong> para os famosos chocolates frescos — escolha o tamanho que quiser na vitrine.</div>
+              <a href="https://www.google.com/maps/place/Bahnhofstrasse,+Zurich" target="_blank" class="map-btn">📍 Bahnhofstrasse</a>
+              <a href="https://www.google.com/maps/dir/Z%C3%BCrich+HB/L%C3%A4derach+Bahnhofstrasse+Zurich/@47.3779,8.5401,15z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x47900a08cc0e6193:0x2900d3b049243a3d!2m2!1d8.5401!2d47.3779!1m5!1m1!1s0x47900a0c3b5b5b5b:0x1234!2m2!1d8.5389!2d47.3731!3e2" target="_blank" class="map-btn" style="background:var(--sage)">🚶 A pé da Estação</a>
+              <div id="next-zhr1" style="display:none;margin-top:6px">
+                <a href="https://www.google.com/maps/dir/Bahnhofstrasse+Zurich/Augustinergasse+Zurich/@47.3747,8.5388,16z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x47900a0c9bffffff:0x1!2m2!1d8.5389!2d47.3731!1m5!1m1!1s0x47900a0aefb3b3b3:0x1!2m2!1d8.5403!2d47.3762!3e2" target="_blank" class="map-btn" style="background:#2e86c1">🚶 Próximo: Augustinergasse</a>
+              </div>
             </div>
           </div>
+
+          <!-- PARADA 2: AUGUSTINERGASSE -->
+          <div class="tl-item" id="zhr-stop-2">
+            <div class="tl-left"><div class="tl-dot" id="dot-zhr2" style="background:var(--gold)"></div><div class="tl-time">12h10</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <div class="tl-title">🏮 Augustinergasse — Rua das Bandeirinhas</div>
+                <button onclick="checkStop('zhr2')" id="btn-zhr2" style="background:var(--gold);color:var(--ink);border:none;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0">✓ Check</button>
+              </div>
+              <div class="tl-desc">Ruela medieval com bandeirinhas suíças, casas coloridas com janelas de madeira esculpidas e pinturas nas fachadas. Ponto perfeito para fotos — uma das ruelas mais fotogênicas de Zurique.</div>
+              <a href="https://www.google.com/maps/place/Augustinergasse,+Zurich" target="_blank" class="map-btn">📍 Augustinergasse</a>
+              <div id="next-zhr2" style="display:none;margin-top:6px">
+                <a href="https://www.google.com/maps/dir/Augustinergasse+Zurich/M%C3%BCnsterhof+Zurich/@47.3755,8.5398,16z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x47900a0aefb3b3b3:0x1!2m2!1d8.5403!2d47.3762!1m5!1m1!1s0x47900a0b2b2b2b2b:0x1!2m2!1d8.5414!2d47.3703!3e2" target="_blank" class="map-btn" style="background:#2e86c1">🚶 Próximo: Almoço</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- PARADA 3: ALMOÇO -->
+          <div class="tl-item" id="zhr-stop-3">
+            <div class="tl-left"><div class="tl-dot" id="dot-zhr3" style="background:var(--gold)"></div><div class="tl-time">12h30</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <div class="tl-title">🍽️ Almoço — Escolha na hora!</div>
+                <button onclick="checkStop('zhr3')" id="btn-zhr3" style="background:var(--gold);color:var(--ink);border:none;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0">✓ Check</button>
+              </div>
+              <div class="tl-desc" style="margin-bottom:8px">3 opções à sua escolha — todas baratas e perto do roteiro:</div>
+
+              <div style="background:rgba(92,122,110,0.08);border-radius:6px;padding:8px 10px;margin-bottom:6px;border-left:3px solid var(--sage)">
+                <div style="font-size:12px;font-weight:600;color:var(--sage);margin-bottom:2px">🌭 Bratwurst de rua — ~5–8 CHF</div>
+                <div style="font-size:11px;color:var(--warm-gray);line-height:1.5">A experiência mais autêntica de Zurique. Salsicha grelhada na brasa num pãozinho crocante. Come andando. Vendedores ambulantes pelo centro histórico.</div>
+                <a href="https://www.google.com/maps/search/bratwurst+stand+Zurich+Altstadt" target="_blank" class="map-btn" style="margin-top:4px">📍 Vendedores perto</a>
+              </div>
+
+              <div style="background:rgba(61,107,140,0.08);border-radius:6px;padding:8px 10px;margin-bottom:6px;border-left:3px solid var(--sky)">
+                <div style="font-size:12px;font-weight:600;color:var(--sky);margin-bottom:2px">🥗 Coop Self-Service — ~12–18 CHF</div>
+                <div style="font-size:11px;color:var(--warm-gray);line-height:1.5">Restaurante self-service dentro do supermercado Coop. Pratos quentes, saladas, sopas de qualidade surpreendente. Já aproveita e compra chocolates na mesma parada!</div>
+                <a href="https://www.google.com/maps/place/Coop+Bahnhofstrasse+Zurich" target="_blank" class="map-btn" style="margin-top:4px">📍 Coop Bahnhofstrasse</a>
+              </div>
+
+              <div style="background:rgba(184,151,74,0.08);border-radius:6px;padding:8px 10px;border-left:3px solid var(--gold)">
+                <div style="font-size:12px;font-weight:600;color:var(--gold);margin-bottom:2px">🥐 Sprüngli — ~8–12 CHF</div>
+                <div style="font-size:11px;color:var(--warm-gray);line-height:1.5">Confeitaria de luxo suíça desde 1845 na Paradeplatz. Salgados, croissants e doces finos. Come na praça ao ar livre.</div>
+                <a href="https://www.google.com/maps/place/Confiserie+Spr%C3%BCngli+Paradeplatz+Zurich" target="_blank" class="map-btn" style="margin-top:4px">📍 Sprüngli Paradeplatz</a>
+              </div>
+
+              <div id="next-zhr3" style="display:none;margin-top:8px">
+                <a href="https://www.google.com/maps/dir/Paradeplatz+Zurich/M%C3%BCnsterhof+Zurich/@47.3706,8.5408,16z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x47900a0c0b0b0b0b:0x1!2m2!1d8.5392!2d47.3702!1m5!1m1!1s0x47900a0b2b2b2b2b:0x1!2m2!1d8.5414!2d47.3703!3e2" target="_blank" class="map-btn" style="background:#2e86c1">🚶 Próximo: Münsterhof</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- PARADA 4: MÜNSTERHOF -->
+          <div class="tl-item" id="zhr-stop-4">
+            <div class="tl-left"><div class="tl-dot" id="dot-zhr4" style="background:var(--gold)"></div><div class="tl-time">13h15</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <div class="tl-title">⛲ Münsterhof</div>
+                <button onclick="checkStop('zhr4')" id="btn-zhr4" style="background:var(--gold);color:var(--ink);border:none;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0">✓ Check</button>
+              </div>
+              <div class="tl-desc">Praça medieval com fontes e prédios coloridos ao redor. Principal praça histórica de Zurique desde a Idade Média. Ao lado da Fraumünster.</div>
+              <a href="https://www.google.com/maps/place/M%C3%BCnsterhof,+Zurich" target="_blank" class="map-btn">📍 Münsterhof</a>
+              <div id="next-zhr4" style="display:none;margin-top:6px">
+                <a href="https://www.google.com/maps/dir/M%C3%BCnsterhof+Zurich/Fraum%C3%BCnster+Zurich/@47.3702,8.5412,17z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x47900a0b2b2b2b2b:0x1!2m2!1d8.5414!2d47.3703!1m5!1m1!1s0x47900a0b3e3e3e3e:0x1!2m2!1d8.5416!2d47.3699!3e2" target="_blank" class="map-btn" style="background:#2e86c1">🚶 Próximo: Fraumünster</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- PARADA 5: FRAUMÜNSTER -->
+          <div class="tl-item" id="zhr-stop-5">
+            <div class="tl-left"><div class="tl-dot" id="dot-zhr5" style="background:var(--gold)"></div><div class="tl-time">13h25</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <div class="tl-title">⛪ Fraumünster + Ponte Münsterbrücke</div>
+                <button onclick="checkStop('zhr5')" id="btn-zhr5" style="background:var(--gold);color:var(--ink);border:none;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0">✓ Check</button>
+              </div>
+              <div class="tl-desc">A foto clássica de Zurique: ponte Münsterbrücke sobre o Rio Limmat com a torre verde da Fraumünster ao fundo. Igreja com vitrais de Marc Chagall (entrada ~6 CHF, opcional).</div>
+              <a href="https://www.google.com/maps/place/Fraum%C3%BCnster,+Zurich" target="_blank" class="map-btn">📍 Fraumünster</a>
+              <a href="https://www.google.com/maps/place/M%C3%BCnsterbr%C3%BCcke,+Zurich" target="_blank" class="map-btn">📍 Ponte Münsterbrücke</a>
+              <div id="next-zhr5" style="display:none;margin-top:6px">
+                <a href="https://www.google.com/maps/dir/Fraum%C3%BCnster+Zurich/Lindenhof+Zurich/@47.3705,8.5408,16z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x47900a0b3e3e3e3e:0x1!2m2!1d8.5416!2d47.3699!1m5!1m1!1s0x47900a0b5c5c5c5c:0x1!2m2!1d8.5404!2d47.3726!3e2" target="_blank" class="map-btn" style="background:#2e86c1">🚶 Próximo: Lindenhof</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- PARADA 6: LINDENHOF -->
+          <div class="tl-item" id="zhr-stop-6">
+            <div class="tl-left"><div class="tl-dot" id="dot-zhr6" style="background:var(--gold)"></div><div class="tl-time">13h45</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <div class="tl-title">🌳 Lindenhof — Mirante</div>
+                <button onclick="checkStop('zhr6')" id="btn-zhr6" style="background:var(--gold);color:var(--ink);border:none;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0">✓ Check</button>
+              </div>
+              <div class="tl-desc">Praça no alto de uma colina com a melhor vista panorâmica do centro histórico e do Rio Limmat. Acesso por escadaria. Gratuito. Tem tabuleiro de xadrez gigante no chão!</div>
+              <a href="https://www.google.com/maps/place/Lindenhof,+Zurich" target="_blank" class="map-btn">📍 Lindenhof</a>
+              <div id="next-zhr6" style="display:none;margin-top:6px">
+                <a href="https://www.google.com/maps/dir/Lindenhof+Zurich/Caf%C3%A9+%26+Conditorei+1842+Zurich/@47.3726,8.5404,16z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x47900a0b5c5c5c5c:0x1!2m2!1d8.5404!2d47.3726!1m5!1m1!1s0x47900a0a1a1a1a1a:0x1!2m2!1d8.5436!2d47.3708!3e2" target="_blank" class="map-btn" style="background:#2e86c1">🚶 Próximo: Café 1842</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- PARADA 7: CAFÉ 1842 -->
+          <div class="tl-item" id="zhr-stop-7">
+            <div class="tl-left"><div class="tl-dot" id="dot-zhr7" style="background:var(--gold)"></div><div class="tl-time">14h15</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <div class="tl-title">☕ Café & Conditorei 1842</div>
+                <button onclick="checkStop('zhr7')" id="btn-zhr7" style="background:var(--gold);color:var(--ink);border:none;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0">✓ Check</button>
+              </div>
+              <div class="tl-desc">O café mais antigo de Zurique (desde 1842), no Napfgasse 4. Decoração Belle Époque com poltronas vermelhas. Famoso pelo chocolate quente artesanal "Schober Schoggi" — cremoso e intenso. Aberto até às 19h (sab até 20h).</div>
+              <a href="https://www.google.com/maps/place/Caf%C3%A9+%26+Conditorei+1842,+Napfgasse+4,+Zurich" target="_blank" class="map-btn">📍 Café & Conditorei 1842</a>
+              <div id="next-zhr7" style="display:none;margin-top:6px">
+                <a href="https://www.google.com/maps/dir/Napfgasse+4+Zurich/Coop+City+Zurich+Bellevue/@47.3708,8.5435,16z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x47900a0a1a1a1a1a:0x1!2m2!1d8.5436!2d47.3708!1m5!1m1!1s0x47900a0c4a4a4a4a:0x1!2m2!1d8.5474!2d47.3663!3e2" target="_blank" class="map-btn" style="background:#2e86c1">🚶 Próximo: Coop/Migros</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- PARADA 8: COOP/MIGROS -->
+          <div class="tl-item" id="zhr-stop-8">
+            <div class="tl-left"><div class="tl-dot" id="dot-zhr8" style="background:var(--gold)"></div><div class="tl-time">14h50</div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <div class="tl-title">🛒 Coop ou Migros — Chocolates!</div>
+                <button onclick="checkStop('zhr8')" id="btn-zhr8" style="background:var(--gold);color:var(--ink);border:none;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0">✓ Check</button>
+              </div>
+              <div class="tl-desc">Maior variedade de chocolates suíços pelo melhor preço. Marcas: Lindt, Toblerone, Cailler, Frey, Camille Bloch. Compre bastante — é muito mais barato aqui do que em qualquer loja turística!</div>
+              <a href="https://www.google.com/maps/search/Coop+Migros+Zurich+center" target="_blank" class="map-btn">📍 Coop/Migros perto</a>
+              <div id="next-zhr8" style="display:none;margin-top:6px">
+                <a href="https://www.google.com/maps/dir/Bellevue+Zurich/Z%C3%BCrich+HB/@47.366,8.544,15z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x47900a09d9d9d9d9:0x1!2m2!1d8.5474!2d47.3663!1m5!1m1!1s0x47900a08cc0e6193:0x2900d3b049243a3d!2m2!1d8.5401!2d47.3779!3e2" target="_blank" class="map-btn" style="background:#2e86c1">🚶 Retorno: Zürich HB</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- RETORNO AEROPORTO -->
           <div class="tl-item">
             <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">15h30</div><div class="tl-line"></div></div>
             <div class="tl-content">
               <div class="tl-title">🔄 Retorno ao aeroporto</div>
-              <div class="tl-desc">Voltar às malas e seguir para o gate. Lembrar: segurança ZRH pode ser rápida mas aeroporto é grande.</div>
+              <div class="tl-desc">S-Bahn da Zürich HB direto ao aeroporto. ~10 min. Estar no gate até às 17h20 (embarque às 17h50).</div>
+              <div class="tl-alert">⚠️ O aeroporto de Zurique é grande — chegar com pelo menos 45 min antes do embarque.</div>
             </div>
           </div>
+
+          <!-- VOO ZRH-FCO -->
           <div class="tl-item">
             <div class="tl-left"><div class="tl-dot"></div><div class="tl-time">17h50</div><div class="tl-line"></div></div>
             <div class="tl-content">
@@ -570,6 +725,7 @@ body {
               <div class="tl-desc">Check-in e descanso. Embarque no cruzeiro amanhã cedo.</div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -1667,6 +1823,29 @@ window.addEventListener('DOMContentLoaded', function() {
     loadWeather('Roma', 41.9, 12.5, null);
   });
 });
+
+function checkStop(id) {
+  var btn = document.getElementById('btn-' + id);
+  var dot = document.getElementById('dot-' + id);
+  var next = document.getElementById('next-' + id);
+  if (!btn) return;
+  var done = btn.getAttribute('data-done') === '1';
+  if (!done) {
+    btn.textContent = '✅ Feito';
+    btn.style.background = 'var(--sage)';
+    btn.style.color = 'white';
+    btn.setAttribute('data-done', '1');
+    if (dot) { dot.style.background = 'var(--sage)'; dot.style.transform = 'scale(1.3)'; }
+    if (next) { next.style.display = 'block'; }
+  } else {
+    btn.textContent = '✓ Check';
+    btn.style.background = 'var(--gold)';
+    btn.style.color = 'var(--ink)';
+    btn.setAttribute('data-done', '0');
+    if (dot) { dot.style.background = 'var(--gold)'; dot.style.transform = 'scale(1)'; }
+    if (next) { next.style.display = 'none'; }
+  }
+}
 
 function toggleDay(header) {
   const body = header.nextElementSibling;
